@@ -1,0 +1,15 @@
+- name: Create VM
+    azure_rm_virtualmachine:
+      resource_group: automation-rg
+      name: win-vm
+      vm_size: Standard_DS1_v2
+      admin_username: azureuser
+      admin_password: welkom01
+      network_interfaces: nic
+      os_type: Windows
+      image:
+          offer: WindowsServer
+          publisher: MicrosoftWindowsServer
+          sku: 2019-Datacenter
+          version: latest
+    no_log: true
