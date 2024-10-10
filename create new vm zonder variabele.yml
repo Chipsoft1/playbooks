@@ -1,31 +1,31 @@
 ---
 - name: Create Azure VM
-  hosts: localhost
+  hosts: windows
   connection: local
   collections:
       - azure.azcollection
   tasks:
 
   - name: Create resource group
-    azure.azcollection.azure_rm_resourcegroup:
+      azure_rm_resourcegroup:
       name: test-rg-ansible
       location: westeurope
 
   - name: Create virtual network
-    azure.azcollection.azure_rm_virtualnetwork:
+      azure_rm_virtualnetwork:
       resource_group: test-rg-ansible
       name: vNet
       address_prefixes: "10.0.0.0/16"
 
   - name: Add subnet
-    azure.azcollection.azure_rm_subnet:
+      azure_rm_subnet:
       resource_group: test-rg-ansible
       name: subnet
       address_prefix: "10.0.1.0/24"
       virtual_network: vNet
 
   - name: Create public IP address
-    azure.azcollection.azure_rm_publicipaddress:
+      azure_rm_publicipaddress:
       resource_group: test-rg-ansible
       allocation_method: Static
       name: pip
@@ -36,7 +36,7 @@
       msg: "The public IP is {{ output_ip_address.state.ip_address }}"
   
   - name: Create Network Security Group
-    azure.azcollection.azure_rm_securitygroup:
+      azure_rm_securitygroup:
       resource_group: test-rg-ansible
       name: test-rg-ansible-networkSecurityGroup
       rules:
@@ -64,7 +64,7 @@
           direction: Inbound
 
   - name: Create a network interface
-    azure.azcollection.azure_rm_networkinterface:
+      azure_rm_networkinterface:
       name: nic
       resource_group: test-rg-ansible
       virtual_network: vNet
@@ -76,7 +76,7 @@
           primary: True
 
   - name: Create VM
-    azure.azcollection.azure_rm_virtualmachine:
+      azure_rm_virtualmachine:
       resource_group: test-rg-ansible
       name: win-vm
       vm_size: Standard_DS1_v2
@@ -92,7 +92,7 @@
     no_log: true
 
   - name: Create VM script extension to enable HTTPS WinRM listener
-    azure.azcollection.azure_rm_virtualmachineextension:
+      azure_rm_virtualmachineextension:
       name: winrm-extension
       resource_group: test-rg-ansible
       virtual_machine_name: win-vm
@@ -103,7 +103,7 @@
       auto_upgrade_minor_version: true
 
   - name: Get facts for one Public IP
-    azure.azcollection.azure_rm_publicipaddress_info:
+      azure_rm_publicipaddress_info:
       resource_group: test-rg-ansible
       name: pip
     register: publicipaddresses
