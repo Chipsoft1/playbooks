@@ -1,7 +1,6 @@
 ---
 - name: Create Azure VM
   hosts: windows
-  connection: local
   collections:
       - azure.azcollection
   tasks:
