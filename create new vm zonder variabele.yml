@@ -1,6 +1,6 @@
 ---
 - name: Create Azure VM
-  hosts: windows
+  hosts: localhost
   tasks:
 
   - name: Create resource group
