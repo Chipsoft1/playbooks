@@ -3,27 +3,22 @@
   hosts: localhost
   tasks:
 
-  - name: Create resource group
-    azure.azcollection.azure_rm_resourcegroup:
-      name: test-rg-ansible
-      location: westeurope
-
   - name: Create virtual network
     azure.azcollection.azure_rm_virtualnetwork:
-      resource_group: test-rg-ansible
+      resource_group: automation-deploy-rg
       name: vNet
       address_prefixes: "10.0.0.0/16"
 
   - name: Add subnet
     azure.azcollection.azure_rm_subnet:
-      resource_group: test-rg-ansible
+      resource_group: automation-deploy-rg
       name: subnet
       address_prefix: "10.0.1.0/24"
       virtual_network: vNet
 
   - name: Create public IP address
     azure.azcollection.azure_rm_publicipaddress:
-      resource_group: test-rg-ansible
+      resource_group: automation-deploy-rg
       allocation_method: Static
       name: pip
     register: output_ip_address
@@ -34,8 +29,8 @@
   
   - name: Create Network Security Group
     azure.azcollection.azure_rm_securitygroup:
-      resource_group: test-rg-ansible
-      name: test-rg-ansible-networkSecurityGroup
+      resource_group: automation-deploy-rg
+      name: automation-deploy-rg-networkSecurityGroup
       rules:
         - name: 'allow_rdp'
           protocol: Tcp
@@ -63,10 +58,10 @@
   - name: Create a network interface
     azure.azcollection.azure_rm_networkinterface:
       name: nic
-      resource_group: test-rg-ansible
+      resource_group: automation-deploy-rg
       virtual_network: vNet
       subnet_name: subnet
-      security_group: test-rg-ansible-networkSecurityGroup
+      security_group: automation-deploy-rg-networkSecurityGroup
       ip_configurations:
         - name: default
           public_ip_address_name: pip
@@ -74,7 +69,7 @@
 
   - name: Create VM
     azure.azcollection.azure_rm_virtualmachine:
-      resource_group: test-rg-ansible
+      resource_group: automation-deploy-rg
       name: win-vm
       vm_size: Standard_DS1_v2
       admin_username: azureuser
@@ -91,7 +86,7 @@
   - name: Create VM script extension to enable HTTPS WinRM listener
     azure.azcollection.azure_rm_virtualmachineextension:
       name: winrm-extension
-      resource_group: test-rg-ansible
+      resource_group: automation-deploy-rg
       virtual_machine_name: win-vm
       publisher: Microsoft.Compute
       virtual_machine_extension_type: CustomScriptExtension
@@ -101,7 +96,7 @@
 
   - name: Get facts for one Public IP
     azure.azcollection.azure_rm_publicipaddress_info:
-      resource_group: test-rg-ansible
+      resource_group: automation-deploy-rg
       name: pip
     register: publicipaddresses
 
