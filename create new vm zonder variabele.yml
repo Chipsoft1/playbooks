@@ -73,7 +73,7 @@
       name: win-vm
       vm_size: Standard_DS1_v2
       admin_username: azureuser
-      admin_password: welkom01
+      admin_password: Welkom01!
       network_interfaces: nic
       os_type: Windows
       image:
